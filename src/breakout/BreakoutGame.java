@@ -12,7 +12,7 @@ import edu.macalester.graphics.Rectangle;
  */
 public class BreakoutGame {
     private static final int CANVAS_WIDTH = 600;
-    private static final int CANVAS_HEIGHT = 800;
+    private static final int CANVAS_HEIGHT = 750;
     // private static final int EDGE = 790;
     private static final int TOTAL_BRICKS = 100;
     private static final int BRICK_ROWS = 10;
@@ -22,7 +22,7 @@ public class BreakoutGame {
 
     private CanvasWindow canvas;
     private List<Rectangle> bricks;
-    private Ellipse ball;
+    private Ball ball;
 
 
     public BreakoutGame() {
@@ -37,19 +37,20 @@ public class BreakoutGame {
         Paddle paddle = new Paddle(CANVAS_WIDTH, CANVAS_HEIGHT);
         canvas.add(paddle.shape());
 
-        ball = new Ellipse((CANVAS_WIDTH - 2 * BALL_RADIUS) / 2, (CANVAS_HEIGHT - 2 * BALL_RADIUS) / 2, 2 * BALL_RADIUS, 2 * BALL_RADIUS);
-        ball.setFillColor(Color.BLACK);
-        canvas.add(ball);
+        ball = new Ball(CANVAS_WIDTH/2, CANVAS_HEIGHT/2, 3, 3, CANVAS_HEIGHT, CANVAS_WIDTH, Color.BLACK );
+        
+        // ball.setFillColor(Color.BLACK);
+        canvas.add(ball.getShape());
+        
         animateBall();
     }
 
     public void animateBall(){
-        double dx=1;
-        double dy=1;
+        // double dx=3;
+        // double dy=3;
         canvas.animate(()->{
-            ball.moveBy(dx, dy);
+            ball.move();
         });
-        
     }
 
     public static void main(String[] args){
