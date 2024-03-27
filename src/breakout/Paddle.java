@@ -1,22 +1,22 @@
 package breakout;
 
+import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.Rectangle;
 import java.awt.Color;
 
-public class Paddle{
+public class Paddle extends GraphicsGroup{
     private static final double WIDTH = 90;
     private static final double HEIGHT = 10;
     private static final Color COLOR = Color.BLACK;
     private Rectangle paddle;
 
     public Paddle(double canvasWidth, double canvasHeight){
-        double paddleX = (canvasWidth - WIDTH)/2;
-        double paddleY = canvasHeight - HEIGHT - 100;
+        double paddleX = (canvasWidth - WIDTH);
+        double paddleY = (canvasHeight - HEIGHT) -20;
         paddle = new Rectangle(paddleX, paddleY, WIDTH,HEIGHT);
         paddle.setFillColor(COLOR);
-        // add(paddle);
     }
-    public Rectangle shape(){
+    public Rectangle paddleShape(){
         return paddle;
     }
 

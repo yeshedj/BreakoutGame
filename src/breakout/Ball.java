@@ -1,10 +1,12 @@
 package breakout;
 import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.Ellipse;
+import edu.macalester.graphics.GraphicsGroup;
+
 import java.awt.Color;
 
 
-public class Ball {
+public class Ball extends GraphicsGroup {
     private static final double RADIUS = 10;
     private Ellipse ball;
     private double dx;
@@ -17,17 +19,18 @@ public class Ball {
         ball.setFillColor(color);
         this.canvasHeight=canvasHeight;
         this.canvasWidth=canvasWidth;
-        this.dx=dx;
-        this.dy=dy;
+        this.dx=5;
+        this.dy=5;
     }
 
-    public Ellipse getShape(){
+    public Ellipse ballShape(){
         return ball;
     }
 
     public void move(){
 
         ball.moveBy(dx, dy);
+        
 
         if (ball.getX() <= 0 || ball.getX() + 2 * RADIUS >= canvasWidth) {
             dx = -dx;
@@ -36,14 +39,17 @@ public class Ball {
         }
     }
 
-    // public double getX(){
-    //     return this.dx;
-        
-    // }
-
-    // public double getY(){
-    //     return this.dy;
-    // }
     
+    public void ballPaddleCollision(){
+        if (ball.getY() + 2 * RADIUS >= canvasHeight - 50) {
+            dy = -dy;
+        }
+        else if (ball.getBounds().intersects(paddle.getBounds())){
+            dy = -dy;
+        }
+    }
+
+        
+        
     
 }

@@ -1,11 +1,12 @@
 package breakout;
-import edu.macalester.graphics.CanvasWindow;
+// import edu.macalester.graphics.CanvasWindow;
+import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Color;
 
-public class Brick {
+public class Brick extends GraphicsGroup{
     private static final int WIDTH = 50;
     private static final int HEIGHT = 10;
     private static final int SPACING = 5;
@@ -59,18 +60,5 @@ public class Brick {
                 return Color.MAGENTA;
         }
     }
-    // public List<Color> getBrickColor(){
-    //     return brickColors;
-    // }
 
-
-
-
-    // public Rectangle shape(){
-    //     return brick;
-    // }
-
-    // public void Brick[] (){
-
-    // }
 }
