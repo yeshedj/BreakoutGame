@@ -44,9 +44,9 @@ public class Ball extends GraphicsGroup {
         if (ball.getY() + 2 * RADIUS >= canvasHeight - 50) {
             dy = -dy;
         }
-        else if (ball.getBounds().intersects(paddle.getBounds())){
-            dy = -dy;
-        }
+        // else if (ball.getBounds().intersects(paddle.getBounds())){
+        //     dy = -dy;
+        // }
     }
 
         
