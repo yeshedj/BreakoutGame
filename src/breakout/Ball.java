@@ -30,26 +30,28 @@ public class Ball extends GraphicsGroup {
     public void move(){
 
         ball.moveBy(dx, dy);
-        
 
         if (ball.getX() <= 0 || ball.getX() + 2 * RADIUS >= canvasWidth) {
             dx = -dx;
-        }if (ball.getY() <= 0|| ball.getY() + 2 * RADIUS >= canvasHeight) {
+        }
+        if (ball.getY() <= 0|| ball.getY() + 2 * RADIUS >= canvasHeight) {
             dy = -dy;
         }
     }
+    //if ball hit bottom, restart on click
 
     
     public void ballPaddleCollision(){
         if (ball.getY() + 2 * RADIUS >= canvasHeight - 50) {
             dy = -dy;
+            ball.setPosition();
         }
         // else if (ball.getBounds().intersects(paddle.getBounds())){
         //     dy = -dy;
         // }
     }
 
-        
-        
+
+
     
 }
