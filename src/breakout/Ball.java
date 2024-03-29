@@ -28,7 +28,6 @@ public class Ball extends GraphicsGroup {
     }
 
     public void move(){
-
         ball.moveBy(dx, dy);
 
         if (ball.getX() <= 0 || ball.getX() + 2 * RADIUS >= canvasWidth) {
