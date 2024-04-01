@@ -1,5 +1,5 @@
 package breakout;
-// import edu.macalester.graphics.CanvasWindow;
+import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.Rectangle;
 import java.util.ArrayList;
@@ -11,14 +11,20 @@ public class Brick extends GraphicsGroup{
     private static final int HEIGHT = 10;
     private static final int SPACING = 5;
     private List<Rectangle> bricks;
-    private List<Color> brickColors;
 
-    public Brick(){
+    private List<Color> brickColors;
+    private CanvasWindow canvas;
+
+    public Brick(Color color, double x, double y, CanvasWindow canvas){
         bricks = new ArrayList<>();
         brickColors = new ArrayList<>();
+        this.canvas=canvas;
+        createBricks();
     }
 
-    public List<Rectangle> createBricks(int rows, int cols) {
+    public void createBricks() {
+        int rows = 10;
+        int cols = 10;
         int startX = 25; 
         int startY = 50; 
 
@@ -32,13 +38,13 @@ public class Brick extends GraphicsGroup{
                 brick.setFillColor(color);
                 brick.setStrokeColor(color);
                 bricks.add(brick);
+                canvas.add(brick);
                 brickColors.add(color);
             }
         }
-        return bricks;
+        // return bricks;
         
     }
-
     public Color getRowColor(int row){
         switch(row){
             case 0:
@@ -58,6 +64,18 @@ public class Brick extends GraphicsGroup{
                 return Color.CYAN;
             default:
                 return Color.MAGENTA;
+        }
+    }
+
+    public void addToCanvas(CanvasWindow canvas){
+        for(Rectangle brick : bricks){
+            canvas.add(brick);
+        }
+    }
+
+    public void removeFromCanvas(){
+        for(Rectangle brick:bricks){
+            canvas.remove(brick);
         }
     }
 
