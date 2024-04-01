@@ -1,9 +1,11 @@
 package breakout;
 import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.Ellipse;
+import edu.macalester.graphics.FontStyle;
 import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.GraphicsObject;
 import edu.macalester.graphics.Rectangle;
+import edu.macalester.graphics.GraphicsText;
 
 import java.awt.Color;
 import java.util.Random;
@@ -18,6 +20,8 @@ public class Ball extends GraphicsGroup {
 
     private double topLeftX, topLeftY;
     private double bottomRightX, bottomRightY;
+    private GraphicsText lostMessage;
+    private boolean lostMessageShown = false;
 
 
     public Ball(double centerX, double centerY, double initialSpeedX, double initialSpeedY, double canvasWidth, double canvasHeight){
@@ -61,6 +65,10 @@ public class Ball extends GraphicsGroup {
         }
 
         if(this.bottomRightY >= canvas.getHeight()){
+            if(!lostMessageShown){
+                displayLostMessage(canvas);
+                lostMessageShown=true;
+            }
             this.dx=0;
             this.dy=0;
             this.ball.setPosition(this.ball.getX(),canvas.getHeight()-2*RADIUS-1);
@@ -72,12 +80,31 @@ public class Ball extends GraphicsGroup {
             this.dy = -Math.abs(this.dy);
         }
 
-        Brick collidedBrick = manager.getBrickCollision(this);
+        Brick collidedBrick = handler.getBrickCollision(this);
         if(collidedBrick != null){
-            manager.handleCollision(collidedBrick);
+            handler.handleCollision(collidedBrick);
             // this.dy=Math.abs(this.dy);
             this.dy=-this.dy;
         }
+
+    }
+
+    public void displayLostMessage(CanvasWindow canvas){
+        double centerX=canvas.getWidth()/2;
+        double centerY=canvas.getHeight()/2;
+        lostMessage=new GraphicsText("You lost! Click to Try Again", centerX, centerY);
+        lostMessage.setCenter(centerX,centerY);
+
+        FontStyle style = FontStyle.ITALIC;
+        double size=15.0;
+        lostMessage.setFont(style, size);
+        canvas.add(lostMessage);
+
+        canvas.onClick(event -> {
+            canvas.remove(lostMessage);
+            resetPositionAndVelocity(canvas);
+            lostMessageShown = false;
+        });
 
     }
 
