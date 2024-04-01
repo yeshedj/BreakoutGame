@@ -15,8 +15,8 @@ public class Ball extends GraphicsGroup {
     private static final double RADIUS = 10;
     private Ellipse ball;
     private double dx, dy;
-    private double canvasHeight ;
-    private double canvasWidth;
+    // private double canvasHeight ;
+    // private double canvasWidth;
 
     private double topLeftX, topLeftY;
     private double bottomRightX, bottomRightY;
@@ -29,8 +29,6 @@ public class Ball extends GraphicsGroup {
         this.ball = new Ellipse(centerX-RADIUS, centerY - RADIUS, 2*RADIUS, 2*RADIUS);
         this.ball.setFillColor(Color.BLACK);
 
-
-
         double randomSpeed = 5.0 + Math.random() *(10.0-5.0);
         this.dx = randomSpeed;
         if(Math.random()<0.5){
@@ -42,12 +40,7 @@ public class Ball extends GraphicsGroup {
         this.topLeftY=centerY-RADIUS;
         this.bottomRightX=centerX+RADIUS;
         this.bottomRightY=centerY+RADIUS;
-
     }
-
-    // public Ellipse ballShape(){
-    //     return ball;
-    // }
 
     public void move(CanvasWindow canvas, Rectangle paddle, BrickHandler handler){
         this.ball.moveBy(this.dx,this.dy);
@@ -55,7 +48,6 @@ public class Ball extends GraphicsGroup {
         this.topLeftY = this.ball.getY();
         this.bottomRightX = this.ball.getX() + 2 * RADIUS;
         this.bottomRightY = this.ball.getY() + 2 * RADIUS;
-
 
         if (this.topLeftX <= 0 || this.bottomRightX  >= canvas.getWidth()) {
             this.dx = -this.dx;
@@ -74,8 +66,6 @@ public class Ball extends GraphicsGroup {
             this.ball.setPosition(this.ball.getX(),canvas.getHeight()-2*RADIUS-1);
         }
 
-
-        // GraphicsObject collisionObject = objectCollisions(canvas);
         if(this.objectCollisions(canvas)==paddle){
             this.dy = -Math.abs(this.dy);
         }
@@ -83,10 +73,9 @@ public class Ball extends GraphicsGroup {
         Brick collidedBrick = handler.getBrickCollision(this);
         if(collidedBrick != null){
             handler.handleCollision(collidedBrick);
-            // this.dy=Math.abs(this.dy);
             this.dy=-this.dy;
         }
-
+        checkBrickCollision(handler);
     }
 
     public void displayLostMessage(CanvasWindow canvas){
@@ -108,17 +97,12 @@ public class Ball extends GraphicsGroup {
 
     }
 
-    
-
-
-
-    public GraphicsObject objectCollisions (CanvasWindow canvas){
+    public GraphicsObject objectCollisions(CanvasWindow canvas){
         GraphicsObject topLeftObj = canvas.getElementAt(this.topLeftX, this.topLeftY);
         GraphicsObject topRightObj = canvas.getElementAt(this.bottomRightX, this.topLeftY);
         GraphicsObject bottomLeftObj = canvas.getElementAt(this.topLeftX, this.bottomRightY);
         GraphicsObject bottomRightObj = canvas.getElementAt(this.bottomRightX, this.bottomRightY);
 
-        // Return the first non-null object (if any) found at the corners
         if (topLeftObj != null) {
             return topLeftObj;
         } else if (topRightObj != null) {
@@ -130,7 +114,6 @@ public class Ball extends GraphicsGroup {
         } else {
             return null;
         }
-
     }
 
     public Ellipse getBall() {
@@ -154,7 +137,6 @@ public class Ball extends GraphicsGroup {
     }
 
 
-
     public void resetPositionAndVelocity(CanvasWindow canvas){
         double initialX = (canvas.getWidth() - 2 * RADIUS) / 2;
         double initialY = (canvas.getHeight() - 2 * RADIUS) / 2;
@@ -169,5 +151,12 @@ public class Ball extends GraphicsGroup {
         }
     }
 
+    public void checkBrickCollision(BrickHandler handler){
+        for (Brick brick : handler.getBrickList()){
+            if(this.getBall().getBounds().intersects(brick.getBounds())){
+                handler.handleCollision(brick);
+            }
+        }
+    }
 
 }

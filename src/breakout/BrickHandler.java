@@ -20,7 +20,7 @@ public class BrickHandler{
     public void makeBrickRows(double xCoor, double yCoor, Color color) {
         double xCoor1 = xCoor;
         for (int i = 0; i < 10; i++) {
-            Brick brick = new Brick(color, xCoor1, yCoor, canvas);
+            Brick brick = new Brick(xCoor1, yCoor, canvas);
             bricks.add(brick);
             brick.addToCanvas(canvas);
             xCoor1 += 60;

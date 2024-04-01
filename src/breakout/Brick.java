@@ -15,7 +15,7 @@ public class Brick extends GraphicsGroup{
     private List<Color> brickColors;
     private CanvasWindow canvas;
 
-    public Brick(Color color, double x, double y, CanvasWindow canvas){
+    public Brick(double x, double y, CanvasWindow canvas){
         bricks = new ArrayList<>();
         brickColors = new ArrayList<>();
         this.canvas=canvas;
@@ -41,10 +41,9 @@ public class Brick extends GraphicsGroup{
                 canvas.add(brick);
                 brickColors.add(color);
             }
-        }
-        // return bricks;
-        
+        }        
     }
+    
     public Color getRowColor(int row){
         switch(row){
             case 0:
