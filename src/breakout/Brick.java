@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.Color;
 
-public class Brick extends GraphicsGroup{
+public class Brick extends Rectangle{
     private static final int WIDTH = 50;
     private static final int HEIGHT = 10;
     private static final int SPACING = 5;

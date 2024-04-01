@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.macalester.graphics.CanvasWindow;
-import edu.macalester.graphics.Rectangle;
+import edu.macalester.graphics.GraphicsObject;
 
 public class BrickHandler{
     private List <Brick> bricks;
@@ -53,13 +53,29 @@ public class BrickHandler{
     }
 
     public Brick getBrickCollision(Ball ball){
-        for (Brick brick : bricks){
-            if(ball.getBall().getBounds().intersects(brick.getBounds())){
-                return brick;
+        // for (Brick brick : bricks){
+        //     if(ball.getBall().getBounds().intersects(brick.getBounds())){
+        //         return brick;
+        //     }
+
+        GraphicsObject collisionObject = ball.objectCollisions(canvas);
+        // for (Brick brick : bricks){
+            if(collisionObject!= null && collisionObject instanceof Brick){
+                Brick brick=(Brick) collisionObject;
+                handleCollision(brick);;
             }
-        }
+        // }
+
+        // GraphicsObject collisionObject = ball.objectCollisions(canvas);
+        // if (collisionObject != null && collisionObject instanceof Brick) {
+        //     Brick brick = (Brick) collisionObject;
+        //     handleCollision(brick);
+        // }
+
         return null;
+
     }
+    
 
     public void handleCollision(Brick brick){
         brick.removeFromCanvas();

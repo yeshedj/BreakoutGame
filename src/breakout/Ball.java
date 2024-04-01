@@ -1,14 +1,13 @@
 package breakout;
+import java.awt.Color;
+
 import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.Ellipse;
 import edu.macalester.graphics.FontStyle;
 import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.GraphicsObject;
-import edu.macalester.graphics.Rectangle;
 import edu.macalester.graphics.GraphicsText;
-
-import java.awt.Color;
-import java.util.Random;
+import edu.macalester.graphics.Rectangle;
 
 
 public class Ball extends GraphicsGroup {
@@ -66,22 +65,28 @@ public class Ball extends GraphicsGroup {
             this.ball.setPosition(this.ball.getX(),canvas.getHeight()-2*RADIUS-1);
         }
 
-        if(this.objectCollisions(canvas)==paddle){
+        GraphicsObject collidedObject = this.objectCollisions(canvas);
+        if(collidedObject==paddle){
             this.dy = -Math.abs(this.dy);
+            System.out.println("Paddle Hit!");
+        }
+        else if (collidedObject instanceof Brick) {
+            System.out.println("Brick Hit!");
         }
 
-        Brick collidedBrick = handler.getBrickCollision(this);
-        if(collidedBrick != null){
-            handler.handleCollision(collidedBrick);
-            this.dy=-this.dy;
-        }
-        checkBrickCollision(handler);
+
+        // Brick collidedBrick = handler.getBrickCollision(this);
+        // if(collidedBrick != null){
+        //     handler.handleCollision(collidedBrick);
+        //     this.dy=-this.dy;
+        // }
+        // checkBrickCollision(handler, canvas);
     }
 
     public void displayLostMessage(CanvasWindow canvas){
         double centerX=canvas.getWidth()/2;
         double centerY=canvas.getHeight()/2;
-        lostMessage=new GraphicsText("You lost! Click to Try Again", centerX, centerY);
+        lostMessage=new GraphicsText("Uh oh! Click to Try Again", centerX, centerY);
         lostMessage.setCenter(centerX,centerY);
 
         FontStyle style = FontStyle.ITALIC;
@@ -151,12 +156,30 @@ public class Ball extends GraphicsGroup {
         }
     }
 
-    public void checkBrickCollision(BrickHandler handler){
-        for (Brick brick : handler.getBrickList()){
-            if(this.getBall().getBounds().intersects(brick.getBounds())){
-                handler.handleCollision(brick);
-            }
-        }
-    }
+    public void checkBrickCollision(BrickHandler handler, CanvasWindow canvas){
+        // for (Brick brick : handler.getBrickList()){
+        //     if(this.getBall().getBounds().intersects(brick.getBounds())){
+        //         handler.handleCollision(brick);
+        //     }
+        // }
 
+        GraphicsObject collisionObject = objectCollisions(canvas);
+        // for(Brick brick : handler.getBrickList()){
+            if(collisionObject!= null && collisionObject instanceof Brick){
+                Brick brick=(Brick) collisionObject;
+                handler.handleCollision(brick);
+                System.out.println("Working?");
+            }
+        // }
+    
+
+        // GraphicsObject collisionObject = objectCollisions(canvas);
+        // if (collisionObject != null && collisionObject instanceof Brick) {
+        //     Brick brick = (Brick) collisionObject;
+        //     handler.handleCollision(brick);
+        // }
+    }
 }
+
+
+
