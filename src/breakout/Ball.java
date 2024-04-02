@@ -70,7 +70,7 @@ public class Ball extends GraphicsGroup {
                 System.out.println("Brick Hit!");
                 Brick brick = (Brick) collidedObject;
                 handler.removeBrick(brick);
-                this.dy = -this.dy;
+                
             } else if (collidedObject == paddle) {
                 this.dy = -Math.abs(this.dy); 
                 System.out.println("Paddle Hit!");
