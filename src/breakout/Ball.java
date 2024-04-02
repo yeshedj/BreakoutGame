@@ -65,14 +65,28 @@ public class Ball extends GraphicsGroup {
             this.ball.setPosition(this.ball.getX(),canvas.getHeight()-2*RADIUS-1);
         }
 
-        GraphicsObject collidedObject = this.objectCollisions(canvas);
-        if(collidedObject==paddle){
-            this.dy = -Math.abs(this.dy);
-            System.out.println("Paddle Hit!");
-        }
-        else if (collidedObject instanceof Brick) {
-            System.out.println("Brick Hit!");
-        }
+        GraphicsObject collidedObject = this.objectCollisions(canvas, handler);
+            if (collidedObject instanceof Brick) {
+                System.out.println("Brick Hit!");
+                Brick brick = (Brick) collidedObject;
+                handler.removeBrick(brick);
+                this.dy = -this.dy;
+            } else if (collidedObject == paddle) {
+                this.dy = -Math.abs(this.dy); 
+                System.out.println("Paddle Hit!");
+            }
+
+        
+        // if(collidedObject==paddle){
+        //     this.dy = -Math.abs(this.dy);
+        //     System.out.println("Paddle Hit!");
+        // }
+        // else if (collidedObject instanceof Brick) {
+        //     System.out.println("Brick Hit!");
+        //     Brick brick = (Brick) collidedObject;
+        //     handler.removeBrick(brick);
+        //     this.dy=-this.dy;
+        // }
 
 
         // Brick collidedBrick = handler.getBrickCollision(this);
@@ -102,24 +116,32 @@ public class Ball extends GraphicsGroup {
 
     }
 
-    public GraphicsObject objectCollisions(CanvasWindow canvas){
+    public GraphicsObject objectCollisions(CanvasWindow canvas, BrickHandler handler){
         GraphicsObject topLeftObj = canvas.getElementAt(this.topLeftX, this.topLeftY);
         GraphicsObject topRightObj = canvas.getElementAt(this.bottomRightX, this.topLeftY);
         GraphicsObject bottomLeftObj = canvas.getElementAt(this.topLeftX, this.bottomRightY);
         GraphicsObject bottomRightObj = canvas.getElementAt(this.bottomRightX, this.bottomRightY);
 
-        if (topLeftObj != null) {
+        if (topLeftObj != null || topLeftObj instanceof Brick) {
             return topLeftObj;
-        } else if (topRightObj != null) {
+        } else if (topRightObj != null || topRightObj instanceof Brick) {
             return topRightObj;
-        } else if (bottomLeftObj != null) {
+        } else if (bottomLeftObj != null || bottomLeftObj instanceof Brick) {
             return bottomLeftObj;
-        } else if (bottomRightObj != null) {
+        } else if (bottomRightObj != null || bottomRightObj instanceof Brick) {
             return bottomRightObj;
-        } else {
-            return null;
+        } 
+
+        GraphicsObject collidedObject = canvas.getElementAt(this.ball.getCenter());
+        if (collidedObject != null && collidedObject instanceof Brick) {
+            return collidedObject;
         }
+
+        return null;
+
+        
     }
+    
 
     public Ellipse getBall() {
         return this.ball;
@@ -156,28 +178,16 @@ public class Ball extends GraphicsGroup {
         }
     }
 
-    public void checkBrickCollision(BrickHandler handler, CanvasWindow canvas){
-        // for (Brick brick : handler.getBrickList()){
-        //     if(this.getBall().getBounds().intersects(brick.getBounds())){
-        //         handler.handleCollision(brick);
-        //     }
-        // }
-
-        GraphicsObject collisionObject = objectCollisions(canvas);
+    public void checkBrickCollision(CanvasWindow canvas, BrickHandler handler){
+  
+        GraphicsObject collisionObject = objectCollisions(canvas, handler);
         // for(Brick brick : handler.getBrickList()){
             if(collisionObject!= null && collisionObject instanceof Brick){
                 Brick brick=(Brick) collisionObject;
-                handler.handleCollision(brick);
+                handler.removeBrick(brick);
                 System.out.println("Working?");
             }
-        // }
-    
 
-        // GraphicsObject collisionObject = objectCollisions(canvas);
-        // if (collisionObject != null && collisionObject instanceof Brick) {
-        //     Brick brick = (Brick) collisionObject;
-        //     handler.handleCollision(brick);
-        // }
     }
 }
 

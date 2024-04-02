@@ -12,13 +12,14 @@ public class Brick extends Rectangle{
     private static final int SPACING = 5;
     private List<Rectangle> bricks;
 
-    private List<Color> brickColors;
+    // private List<Color> brickColors;
     private CanvasWindow canvas;
 
     public Brick(double x, double y, CanvasWindow canvas){
-        bricks = new ArrayList<>();
-        brickColors = new ArrayList<>();
+        super(x,y,WIDTH,HEIGHT);
         this.canvas=canvas;
+        bricks = new ArrayList<>();
+        // brickColors = new ArrayList<>();
         createBricks();
     }
 
@@ -39,7 +40,7 @@ public class Brick extends Rectangle{
                 brick.setStrokeColor(color);
                 bricks.add(brick);
                 canvas.add(brick);
-                brickColors.add(color);
+                // brickColors.add(color);
             }
         }        
     }
@@ -66,11 +67,11 @@ public class Brick extends Rectangle{
         }
     }
 
-    public void addToCanvas(CanvasWindow canvas){
-        for(Rectangle brick : bricks){
-            canvas.add(brick);
-        }
-    }
+    // public void addToCanvas(CanvasWindow canvas){
+    //     for(Rectangle brick : bricks){
+    //         canvas.add(brick);
+    //     }
+    // }
 
     public void removeFromCanvas(){
         for(Rectangle brick:bricks){

@@ -63,6 +63,7 @@ public class BreakoutGame {
     public void animateBall(){
         canvas.animate(()->{
             ball.move(canvas, paddle, brickHandler);
+            ball.checkBrickCollision(canvas, brickHandler);
         });
     }
 

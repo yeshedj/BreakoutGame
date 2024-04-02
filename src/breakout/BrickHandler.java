@@ -22,7 +22,7 @@ public class BrickHandler{
         for (int i = 0; i < 10; i++) {
             Brick brick = new Brick(xCoor1, yCoor, canvas);
             bricks.add(brick);
-            brick.addToCanvas(canvas);
+            // brick.addToCanvas(canvas);
             xCoor1 += 60;
             brickCount++;
         }
@@ -35,8 +35,6 @@ public class BrickHandler{
     }
 
 
-
-
     public int getNumOfBricks() {
         return brickCount;
     }
@@ -45,40 +43,45 @@ public class BrickHandler{
         return bricks;
     }
 
-    public void removeBrickFromList(Brick brick) {
-        if (bricks.contains(brick)) {
-            bricks.remove(brick);
-            brickCount -= 1;
-        }
-    }
+    // public void removeBrickFromList(Brick brick) {
+    //     if (bricks.contains(brick)) {
+    //         bricks.remove(brick);
+    //         brickCount -= 1;
+    //     }
+    // }
 
-    public Brick getBrickCollision(Ball ball){
-        // for (Brick brick : bricks){
-        //     if(ball.getBall().getBounds().intersects(brick.getBounds())){
-        //         return brick;
-        //     }
 
-        GraphicsObject collisionObject = ball.objectCollisions(canvas);
-        // for (Brick brick : bricks){
+    // public void handleCollision(Brick brick){
+    //     brick.removeFromCanvas();
+    //     removeBrickFromList(brick);
+    // }
+
+    public Brick getBrickCollision(Ball ball, BrickHandler handler){
+ 
+        GraphicsObject collisionObject = ball.objectCollisions(canvas, handler);
             if(collisionObject!= null && collisionObject instanceof Brick){
                 Brick brick=(Brick) collisionObject;
-                handleCollision(brick);;
+                removeBrick(brick);
+                return brick;
             }
-        // }
-
-        // GraphicsObject collisionObject = ball.objectCollisions(canvas);
-        // if (collisionObject != null && collisionObject instanceof Brick) {
-        //     Brick brick = (Brick) collisionObject;
-        //     handleCollision(brick);
-        // }
-
         return null;
+        // for (Brick brick : bricks) {
+        //     if (ball.getBall().getBoundsInParent().intersects(brick.getBoundsInParent())) {
+        //         return brick; // Return the collided brick
+        //     }
+        // }
+        // return null;
+    }
 
+
+    public void removeBrick(Brick brick){
+        if(bricks.contains(brick)){
+            bricks.remove(brick);
+            canvas.remove(brick);
+            brick.removeFromCanvas();
+            brickCount--;
+        }
     }
     
 
-    public void handleCollision(Brick brick){
-        brick.removeFromCanvas();
-        removeBrickFromList(brick);
-    }
 }
