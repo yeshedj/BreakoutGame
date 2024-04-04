@@ -4,11 +4,13 @@
 
 package breakout;
 import edu.macalester.graphics.CanvasWindow;
+
 import edu.macalester.graphics.Ellipse;
-import edu.macalester.graphics.FontStyle;
 import edu.macalester.graphics.GraphicsObject;
 import edu.macalester.graphics.Rectangle;
+
 import edu.macalester.graphics.GraphicsText;
+import edu.macalester.graphics.FontStyle;
 
 import java.awt.Color;
 import java.util.Timer;
@@ -194,4 +196,3 @@ public class Ball extends Ellipse {
         addedToCanvas = true;
     }
 }
-    

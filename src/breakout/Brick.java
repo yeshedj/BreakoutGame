@@ -50,26 +50,21 @@ public class Brick extends GraphicsObject{
 
     @Override
     protected void drawInLocalCoordinates(Graphics2D gc) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'drawInLocalCoordinates'");
     }
 
     @Override
     public boolean testHitInLocalCoordinates(double x, double y) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'testHitInLocalCoordinates'");
     }
 
     @Override
     public Rectangle2D getBounds() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getBounds'");
     }
 
     @Override
     protected Object getEqualityAttributes() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getEqualityAttributes'");
     }
 }
-

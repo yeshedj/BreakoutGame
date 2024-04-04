@@ -7,10 +7,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import edu.macalester.graphics.CanvasWindow;
-import edu.macalester.graphics.FontStyle;
-import edu.macalester.graphics.GraphicsText;
 import edu.macalester.graphics.Rectangle;
-
 
 /**
  * The game of Breakout. 

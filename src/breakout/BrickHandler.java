@@ -4,9 +4,6 @@
 
 package breakout;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import edu.macalester.graphics.CanvasWindow;
 
 /*
@@ -38,7 +35,6 @@ public class BrickHandler{
         int startX = 5; 
         int startY = 55; 
 
-
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 int x = startX + (BRICK_WIDTH + BRICK_SPACING) * col;
@@ -65,7 +61,4 @@ public class BrickHandler{
         brickCount --;
 
     }
-
-  
 }
-

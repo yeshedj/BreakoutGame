@@ -3,7 +3,6 @@
 // Acknowledements: Tenzin
 
 package breakout;
-
 import edu.macalester.graphics.Rectangle;
 
 /*
@@ -15,6 +14,5 @@ public class Paddle extends Rectangle{
 
     public Paddle(double canvasWidth, double canvasHeight){
         super((canvasWidth - WIDTH), (canvasHeight - HEIGHT) - 20, WIDTH, HEIGHT);
-
     }
 }
