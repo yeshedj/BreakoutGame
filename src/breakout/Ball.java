@@ -1,32 +1,37 @@
 package breakout;
-import java.awt.Color;
-
 import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.Ellipse;
 import edu.macalester.graphics.FontStyle;
 import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.GraphicsObject;
-import edu.macalester.graphics.GraphicsText;
 import edu.macalester.graphics.Rectangle;
+import edu.macalester.graphics.GraphicsText;
+
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Random;
 
 
-public class Ball extends GraphicsGroup {
+public class Ball extends Ellipse {
     private static final double RADIUS = 10;
     private Ellipse ball;
     private double dx, dy;
-    // private double canvasHeight ;
-    // private double canvasWidth;
 
     private double topLeftX, topLeftY;
     private double bottomRightX, bottomRightY;
     private GraphicsText lostMessage;
     private boolean lostMessageShown = false;
+    private BrickHandler brickHandler;
+    private boolean addedToCanvas = false;
+    Color NEW_COLOR = new Color(220, 200, 250);
 
 
-    public Ball(double centerX, double centerY, double initialSpeedX, double initialSpeedY, double canvasWidth, double canvasHeight){
 
-        this.ball = new Ellipse(centerX-RADIUS, centerY - RADIUS, 2*RADIUS, 2*RADIUS);
-        this.ball.setFillColor(Color.BLACK);
+
+    public Ball(double centerX, double centerY, double initialSpeedX, double initialSpeedY, double canvasWidth, double canvasHeight, BrickHandler brickHandler){
+        super(centerX - RADIUS, centerY - RADIUS, 2 * RADIUS, 2 * RADIUS);
+        this.ball=this;
+        this.ball.setFillColor(NEW_COLOR);
 
         double randomSpeed = 5.0 + Math.random() *(10.0-5.0);
         this.dx = randomSpeed;
@@ -39,6 +44,9 @@ public class Ball extends GraphicsGroup {
         this.topLeftY=centerY-RADIUS;
         this.bottomRightX=centerX+RADIUS;
         this.bottomRightY=centerY+RADIUS;
+        this.brickHandler = brickHandler;
+
+        
     }
 
     public void move(CanvasWindow canvas, Rectangle paddle, BrickHandler handler){
@@ -55,6 +63,7 @@ public class Ball extends GraphicsGroup {
             this.dy = -this.dy;
         }
 
+
         if(this.bottomRightY >= canvas.getHeight()){
             if(!lostMessageShown){
                 displayLostMessage(canvas);
@@ -65,42 +74,51 @@ public class Ball extends GraphicsGroup {
             this.ball.setPosition(this.ball.getX(),canvas.getHeight()-2*RADIUS-1);
         }
 
-        GraphicsObject collidedObject = this.objectCollisions(canvas, handler);
-            if (collidedObject instanceof Brick) {
-                System.out.println("Brick Hit!");
-                Brick brick = (Brick) collidedObject;
-                handler.removeBrick(brick);
-                
-            } else if (collidedObject == paddle) {
-                this.dy = -Math.abs(this.dy); 
-                System.out.println("Paddle Hit!");
+        GraphicsObject collisionObject = objectCollisions(canvas);
+        if (collisionObject == paddle) {
+            if (dy > 0) {
+                dy = -dy;
             }
+        } 
+        else {
+            if (collisionObject != null) {
+                canvas.remove(collisionObject);
+                if (brickHandler != null) { 
+                    brickHandler.removeBrickFromList(this);
+                    System.out.println("YAAAA");
+                }
+                dy = -dy;
+                
+                // if (brickHandler != null && brickHandler.getNumOfBricks() == 0) { // Check if brickHandler is not null and there are no bricks left
+                //     displayWinMessage(canvas);
 
-        
-        // if(collidedObject==paddle){
-        //     this.dy = -Math.abs(this.dy);
-        //     System.out.println("Paddle Hit!");
-        // }
-        // else if (collidedObject instanceof Brick) {
-        //     System.out.println("Brick Hit!");
-        //     Brick brick = (Brick) collidedObject;
-        //     handler.removeBrick(brick);
-        //     this.dy=-this.dy;
-        // }
+                // }
+            }
+        }
+    }
+    public void displayWinMessage(CanvasWindow canvas){
+        double centerX = canvas.getWidth() / 2;
+        double centerY = canvas.getHeight() / 2;
+        GraphicsText winMessage = new GraphicsText("You won!", centerX, centerY);
+        winMessage.setCenter(centerX, centerY);
+    
+        FontStyle style = FontStyle.BOLD;
+        double size = 20.0;
+        winMessage.setFont(style, size);
+    
+        winMessage.setFillColor(Color.GREEN);
+    
+        canvas.add(winMessage);  
+        removeFromCanvas(canvas);
+  
 
-
-        // Brick collidedBrick = handler.getBrickCollision(this);
-        // if(collidedBrick != null){
-        //     handler.handleCollision(collidedBrick);
-        //     this.dy=-this.dy;
-        // }
-        // checkBrickCollision(handler, canvas);
     }
 
     public void displayLostMessage(CanvasWindow canvas){
         double centerX=canvas.getWidth()/2;
         double centerY=canvas.getHeight()/2;
-        lostMessage=new GraphicsText("Uh oh! Click to Try Again", centerX, centerY);
+        
+        lostMessage=new GraphicsText("Click to Try Again", centerX, centerY);
         lostMessage.setCenter(centerX,centerY);
 
         FontStyle style = FontStyle.ITALIC;
@@ -116,32 +134,24 @@ public class Ball extends GraphicsGroup {
 
     }
 
-    public GraphicsObject objectCollisions(CanvasWindow canvas, BrickHandler handler){
+    public GraphicsObject objectCollisions(CanvasWindow canvas){
         GraphicsObject topLeftObj = canvas.getElementAt(this.topLeftX, this.topLeftY);
         GraphicsObject topRightObj = canvas.getElementAt(this.bottomRightX, this.topLeftY);
         GraphicsObject bottomLeftObj = canvas.getElementAt(this.topLeftX, this.bottomRightY);
         GraphicsObject bottomRightObj = canvas.getElementAt(this.bottomRightX, this.bottomRightY);
 
-        if (topLeftObj != null || topLeftObj instanceof Brick) {
+        if (topLeftObj != null) {
             return topLeftObj;
-        } else if (topRightObj != null || topRightObj instanceof Brick) {
+        } else if (topRightObj != null) {
             return topRightObj;
-        } else if (bottomLeftObj != null || bottomLeftObj instanceof Brick) {
+        } else if (bottomLeftObj != null) {
             return bottomLeftObj;
-        } else if (bottomRightObj != null || bottomRightObj instanceof Brick) {
+        } else if (bottomRightObj != null) {
             return bottomRightObj;
-        } 
-
-        GraphicsObject collidedObject = canvas.getElementAt(this.ball.getCenter());
-        if (collidedObject != null && collidedObject instanceof Brick) {
-            return collidedObject;
+        } else {
+            return null;
         }
-
-        return null;
-
-        
     }
-    
 
     public Ellipse getBall() {
         return this.ball;
@@ -178,18 +188,40 @@ public class Ball extends GraphicsGroup {
         }
     }
 
-    public void checkBrickCollision(CanvasWindow canvas, BrickHandler handler){
-  
-        GraphicsObject collisionObject = objectCollisions(canvas, handler);
-        // for(Brick brick : handler.getBrickList()){
-            if(collisionObject!= null && collisionObject instanceof Brick){
-                Brick brick=(Brick) collisionObject;
-                handler.removeBrick(brick);
-                System.out.println("Working?");
-            }
-
+    public void paddleCollision(CanvasWindow canvas, Rectangle paddle){
+        if(objectCollisions(canvas) == paddle){
+            dx=-dx;
+            canvas.remove(paddle);
+        }
     }
+
+    public void brickCollision(CanvasWindow canvas, ArrayList<Brick> bricks){
+        GraphicsObject collisionObject = objectCollisions(canvas);
+        if (collisionObject != null) {
+            canvas.remove(collisionObject);
+            // Brick brick = (Brick) collisionObject;
+            dy=-dy;
+            // canvas.remove(brick);
+            
+            // brick.removeFromCanvas();
+            // bricks.remove(brick);
+        } 
+    }
+
+   
+
+        public void addToCanvas(CanvasWindow canvas) {
+            canvas.add(this);
+            addedToCanvas = true;
+
+        }
+    
+        public void removeFromCanvas(CanvasWindow canvas) {
+            // canvas.remove(this);
+            if (addedToCanvas) {
+                canvas.remove(this);
+                addedToCanvas = false;
+            }
+        }
 }
-
-
-
+    

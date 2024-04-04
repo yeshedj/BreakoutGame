@@ -5,78 +5,37 @@ import edu.macalester.graphics.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Color;
+import java.awt.geom.Rectangle2D;
 
-public class Brick extends Rectangle{
-    private static final int WIDTH = 50;
-    private static final int HEIGHT = 10;
-    private static final int SPACING = 5;
-    private List<Rectangle> bricks;
+public class Brick{
 
-    // private List<Color> brickColors;
+    private Rectangle brick;
+
     private CanvasWindow canvas;
+    Color NEW_COLOR = new Color(220, 200, 250);
+
 
     public Brick(double x, double y, CanvasWindow canvas){
-        super(x,y,WIDTH,HEIGHT);
+        brick = new Rectangle(x, y, BrickHandler.BRICK_WIDTH, BrickHandler.BRICK_HEIGHT);
         this.canvas=canvas;
-        bricks = new ArrayList<>();
-        // brickColors = new ArrayList<>();
-        createBricks();
     }
 
-    public void createBricks() {
-        int rows = 10;
-        int cols = 10;
-        int startX = 25; 
-        int startY = 50; 
-
-        for (int row = 0; row < rows; row++) {
-            Color color = getRowColor(row);
-
-            for (int col = 0; col < cols; col++) {
-                int x = startX + (WIDTH + SPACING) * col;
-                int y = startY + (HEIGHT + SPACING) * row;
-                Rectangle brick = new Rectangle(x, y, WIDTH, HEIGHT);
-                brick.setFillColor(color);
-                brick.setStrokeColor(color);
-                bricks.add(brick);
-                canvas.add(brick);
-                // brickColors.add(color);
-            }
-        }        
-    }
-    
-    public Color getRowColor(int row){
-        switch(row){
-            case 0:
-            case 1:
-                return Color.RED;
-            case 2:
-            case 3:
-                return Color.ORANGE;
-            case 4:
-            case 5:
-                return Color.YELLOW;
-            case 6:
-            case 7:
-                return Color.GREEN;
-            case 8:
-            case 9:
-                return Color.CYAN;
-            default:
-                return Color.MAGENTA;
-        }
+    public void setFillColor() {
+        brick.setFillColor(NEW_COLOR);
     }
 
-    // public void addToCanvas(CanvasWindow canvas){
-    //     for(Rectangle brick : bricks){
-    //         canvas.add(brick);
-    //     }
-    // }
+    public void setStrokeColor() {
+        brick.setStrokeColor(Color.BLACK);
+    }
+
+    public void addToCanvas() {
+        canvas.add(brick);
+    }
 
     public void removeFromCanvas(){
-        for(Rectangle brick:bricks){
-            canvas.remove(brick);
-        }
+        canvas.remove(brick);
     }
 
+
 }
+

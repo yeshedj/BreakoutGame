@@ -7,14 +7,12 @@ import java.awt.Color;
 public class Paddle extends GraphicsGroup{
     private static final double WIDTH = 90;
     private static final double HEIGHT = 10;
-    private static final Color COLOR = Color.BLACK;
     private Rectangle paddle;
 
     public Paddle(double canvasWidth, double canvasHeight){
         double paddleX = (canvasWidth - WIDTH);
         double paddleY = (canvasHeight - HEIGHT) -20;
         paddle = new Rectangle(paddleX, paddleY, WIDTH,HEIGHT);
-        paddle.setFillColor(COLOR);
     }
     public Rectangle paddleShape(){
         return paddle;
