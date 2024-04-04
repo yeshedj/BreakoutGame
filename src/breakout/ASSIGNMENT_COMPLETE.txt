@@ -1,7 +1,0 @@
-While working on this assignment, I did not look at anybody else’s solution. I used the following help and outside resources:
-
-resource you used- JavaDocs, W3Schools, JavaFoundations
-
-help you received- Rocky, Stephanie, William, Nadezhdha, Tenzin
-
-your name here- Yeshe
