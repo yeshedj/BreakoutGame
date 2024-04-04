@@ -1,140 +1,133 @@
+// Yeshe Jangchup
+// The Ball class defines the behavior of the ball object in the BreakOut Game. It handles collisions with walls, the paddle, and other objects while also updating its position
+// Acknowledgements: Rocky, Stephanie, William, Nadezhdha
+
 package breakout;
 import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.Ellipse;
 import edu.macalester.graphics.FontStyle;
-import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.GraphicsObject;
 import edu.macalester.graphics.Rectangle;
 import edu.macalester.graphics.GraphicsText;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
-
+/*
+ * Handles the balls collision with the walls, paddle, and bricks
+ */
 public class Ball extends Ellipse {
-    private static final double RADIUS = 10;
     private Ellipse ball;
-    private double dx, dy;
+    private BrickHandler brickHandler;
+
+    private double velocityX, velocityY;
 
     private double topLeftX, topLeftY;
     private double bottomRightX, bottomRightY;
-    private GraphicsText lostMessage;
-    private boolean lostMessageShown = false;
-    private BrickHandler brickHandler;
+
+    private static final double RADIUS = 10;
+    private static final Color NEW_COLOR = new Color(220, 200, 250);
+
     private boolean addedToCanvas = false;
-    Color NEW_COLOR = new Color(220, 200, 250);
-
-
+    private int remainingLives = 3; 
 
 
     public Ball(double centerX, double centerY, double initialSpeedX, double initialSpeedY, double canvasWidth, double canvasHeight, BrickHandler brickHandler){
         super(centerX - RADIUS, centerY - RADIUS, 2 * RADIUS, 2 * RADIUS);
+        
         this.ball=this;
         this.ball.setFillColor(NEW_COLOR);
 
-        double randomSpeed = 5.0 + Math.random() *(10.0-5.0);
-        this.dx = randomSpeed;
-        if(Math.random()<0.5){
-            this.dy=10.0;
-        }else {
-            this.dy=5.0;
-        }
-        this.topLeftX=centerX-RADIUS;
-        this.topLeftY=centerY-RADIUS;
-        this.bottomRightX=centerX+RADIUS;
-        this.bottomRightY=centerY+RADIUS;
         this.brickHandler = brickHandler;
 
+        ballVelocity(getCanvas());
         
+        this.topLeftX=centerX-RADIUS;
+        this.topLeftY=centerY-RADIUS;
+
+        this.bottomRightX=centerX+RADIUS;
+        this.bottomRightY=centerY+RADIUS;
     }
 
+    /*
+     * Updates the position of the ball on the canvas based on the velocity.
+     * Handles the balls collision with canvas walls, paddles, and bricks
+     * Also implements the three lives in the game
+     */
     public void move(CanvasWindow canvas, Rectangle paddle, BrickHandler handler){
-        this.ball.moveBy(this.dx,this.dy);
+        this.ball.moveBy(this.velocityX,this.velocityY);
+
         this.topLeftX = this.ball.getX();
         this.topLeftY = this.ball.getY();
+
         this.bottomRightX = this.ball.getX() + 2 * RADIUS;
         this.bottomRightY = this.ball.getY() + 2 * RADIUS;
 
         if (this.topLeftX <= 0 || this.bottomRightX  >= canvas.getWidth()) {
-            this.dx = -this.dx;
+            this.velocityX = -this.velocityX;
         }
         if (this.topLeftY <= 0 || this.bottomRightY >= canvas.getHeight()) {
-            this.dy = -this.dy;
+            this.velocityY = -this.velocityY;
         }
 
+        if (this.bottomRightY >= canvas.getHeight()) {
+            if (remainingLives > 0) {
+                ballPosition(canvas);
+                this.velocityX=0;
+                this.velocityY=0;
+                
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        ballVelocity(canvas);
+                        move(canvas, paddle, handler);
+                    }
+                }, 1000); 
 
-        if(this.bottomRightY >= canvas.getHeight()){
-            if(!lostMessageShown){
-                displayLostMessage(canvas);
-                lostMessageShown=true;
+                remainingLives--;
+
+            } else {
+                if(handler.getNumOfBricks()==0){
+                    displayGameOverMessage(canvas);
+                }else{
+                    displayGameOverMessage(canvas);
+                }
+                this.velocityX = 0;
+                this.velocityY = 0;
+
+                removeFromCanvas(canvas);
             }
-            this.dx=0;
-            this.dy=0;
-            this.ball.setPosition(this.ball.getX(),canvas.getHeight()-2*RADIUS-1);
         }
-
+    
         GraphicsObject collisionObject = objectCollisions(canvas);
         if (collisionObject == paddle) {
-            if (dy > 0) {
-                dy = -dy;
+            if (velocityY > 0) {
+                velocityY = -velocityY;
             }
-        } 
-        else {
+        } else {
             if (collisionObject != null) {
                 canvas.remove(collisionObject);
                 if (brickHandler != null) { 
                     brickHandler.removeBrickFromList(this);
-                    System.out.println("YAAAA");
                 }
-                dy = -dy;
-                
-                // if (brickHandler != null && brickHandler.getNumOfBricks() == 0) { // Check if brickHandler is not null and there are no bricks left
-                //     displayWinMessage(canvas);
-
-                // }
+                velocityY = -velocityY;
             }
         }
     }
-    public void displayWinMessage(CanvasWindow canvas){
-        double centerX = canvas.getWidth() / 2;
-        double centerY = canvas.getHeight() / 2;
-        GraphicsText winMessage = new GraphicsText("You won!", centerX, centerY);
-        winMessage.setCenter(centerX, centerY);
-    
+
+
+    private void displayGameOverMessage(CanvasWindow canvas) {
+        GraphicsText gameOverMessage = new GraphicsText("Game Over", (canvas.getWidth() / 2)-50, (canvas.getHeight() / 2)+70);
         FontStyle style = FontStyle.BOLD;
-        double size = 20.0;
-        winMessage.setFont(style, size);
-    
-        winMessage.setFillColor(Color.GREEN);
-    
-        canvas.add(winMessage);  
-        removeFromCanvas(canvas);
+        gameOverMessage.setFont(style, 20);
+        gameOverMessage.setFillColor(NEW_COLOR);
+        canvas.add(gameOverMessage);
+    }
   
 
-    }
-
-    public void displayLostMessage(CanvasWindow canvas){
-        double centerX=canvas.getWidth()/2;
-        double centerY=canvas.getHeight()/2;
-        
-        lostMessage=new GraphicsText("Click to Try Again", centerX, centerY);
-        lostMessage.setCenter(centerX,centerY);
-
-        FontStyle style = FontStyle.ITALIC;
-        double size=15.0;
-        lostMessage.setFont(style, size);
-        canvas.add(lostMessage);
-
-        canvas.onClick(event -> {
-            canvas.remove(lostMessage);
-            resetPositionAndVelocity(canvas);
-            lostMessageShown = false;
-        });
-
-    }
-
-    public GraphicsObject objectCollisions(CanvasWindow canvas){
+    private GraphicsObject objectCollisions(CanvasWindow canvas){
         GraphicsObject topLeftObj = canvas.getElementAt(this.topLeftX, this.topLeftY);
         GraphicsObject topRightObj = canvas.getElementAt(this.bottomRightX, this.topLeftY);
         GraphicsObject bottomLeftObj = canvas.getElementAt(this.topLeftX, this.bottomRightY);
@@ -153,75 +146,39 @@ public class Ball extends Ellipse {
         }
     }
 
-    public Ellipse getBall() {
-        return this.ball;
-    }
-
-    public double getDx() {
-        return this.dx;
-    }
-
-    public double getDy() {
-        return this.dy;
-    }
-
-    public void setDx(double dx) {
-        this.dx = dx;
-    }
-
-    public void setDy(double dy) {
-        this.dy = dy;
-    }
-
-
-    public void resetPositionAndVelocity(CanvasWindow canvas){
+    private void ballPosition(CanvasWindow canvas){
         double initialX = (canvas.getWidth() - 2 * RADIUS) / 2;
         double initialY = (canvas.getHeight() - 2 * RADIUS) / 2;
         this.ball.setPosition(initialX, initialY);
 
+    }
+
+    private void ballVelocity(CanvasWindow canvas){
         double randomSpeed = 5.0 + Math.random() *(10.0-5.0);
-        this.dx = randomSpeed;
-        if(Math.random()<0.5){
-            this.dy=10.0;
-        }else {
-            this.dy=5.0;
+        this.velocityX = randomSpeed;
+        if (Math.random() < 0.5) {
+            this.velocityX = -this.velocityX; 
+        }
+        if (Math.random() < 0.5) {
+            this.velocityY = 10.0;
+        } else {
+            this.velocityY = 5.0;
+}
+    }
+
+    private void removeFromCanvas(CanvasWindow canvas) {
+        if (addedToCanvas) {
+            canvas.remove(this);
+            addedToCanvas = false;
         }
     }
 
-    public void paddleCollision(CanvasWindow canvas, Rectangle paddle){
-        if(objectCollisions(canvas) == paddle){
-            dx=-dx;
-            canvas.remove(paddle);
-        }
+    /*
+     * Adds the ball object to the canvas
+     */
+    public void addToCanvas(CanvasWindow canvas) {
+        canvas.add(this);
+        addedToCanvas = true;
     }
-
-    public void brickCollision(CanvasWindow canvas, ArrayList<Brick> bricks){
-        GraphicsObject collisionObject = objectCollisions(canvas);
-        if (collisionObject != null) {
-            canvas.remove(collisionObject);
-            // Brick brick = (Brick) collisionObject;
-            dy=-dy;
-            // canvas.remove(brick);
-            
-            // brick.removeFromCanvas();
-            // bricks.remove(brick);
-        } 
-    }
-
-   
-
-        public void addToCanvas(CanvasWindow canvas) {
-            canvas.add(this);
-            addedToCanvas = true;
-
-        }
-    
-        public void removeFromCanvas(CanvasWindow canvas) {
-            // canvas.remove(this);
-            if (addedToCanvas) {
-                canvas.remove(this);
-                addedToCanvas = false;
-            }
-        }
 }
     

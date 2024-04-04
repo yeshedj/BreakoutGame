@@ -1,38 +1,44 @@
+// Yeshe Jangchup
+// The BrickHandler class involves the creation of the bricks and handling them. It displays a grid of bricks on the canvas and keeps track of the bricks
+// Acknowledgements: Rocky
+
 package breakout;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.macalester.graphics.CanvasWindow;
-import edu.macalester.graphics.Rectangle;
 
-public class BrickHandler{
-    private List <Brick> bricks;
+/*
+ * Creates the bricks and handles brick objects
+ */
+public class BrickHandler{    
     private CanvasWindow canvas;
-    private Ball ball;
+    private List <Brick> bricks;
     int brickCount = 0;
 
-    public static final int BRICK_WIDTH = 60;
+    public static final int BRICK_WIDTH = 65;
     public static final int BRICK_HEIGHT = 20;
-    public static final int BRICK_SPACING = 15;
+    public static final int BRICK_SPACING = 7;
 
 
     public BrickHandler(CanvasWindow canvas) {
-        this.bricks = new ArrayList<>();
         this.canvas = canvas;
+        this.bricks = new ArrayList<>();
     }
 
-
+    /*
+     * Generates a grid of bricks on the canvas, 
+     * iterating over rows and columns to determine positoining
+     */
     public void createBricks() {
-        int rows = 7;
+        int rows = 9;
         int cols = 9;
-        int startX = 4; 
-        int startY = 50; 
+
+        int startX = 5; 
+        int startY = 55; 
 
         for (int row = 0; row < rows; row++) {
-            // Color color = getRowColor(row);
-
             for (int col = 0; col < cols; col++) {
                 int x = startX + (BRICK_WIDTH + BRICK_SPACING) * col;
                 int y = startY + (BRICK_HEIGHT + BRICK_SPACING) * row;
@@ -40,69 +46,23 @@ public class BrickHandler{
                 brick.setFillColor();
                 brick.setStrokeColor();
                 brick.addToCanvas();
-                // brickColors.add(color);
             }
         }        
     }
 
-    // public Color getRowColor(int row){
-    //     switch(row){
-    //         case 0:
-    //         case 1:
-    //             return Color.RED;
-    //         case 2:
-    //         case 3:
-    //             return Color.ORANGE;
-    //         case 4:
-    //         case 5:
-    //             return Color.YELLOW;
-    //         case 6:
-    //         case 7:
-    //             return Color.GREEN;
-    //         case 8:
-    //         case 9:
-    //             return Color.CYAN;
-    //         default:
-    //             return Color.MAGENTA;
-    //     }
-    // }
-
-
-    public boolean bricksStillRemain(){
-        return brickCount >0;
-
-    }
-
+    /*
+     * Returns the number of bricks in the bricks list.
+     */
     public int getNumOfBricks() {
-        return brickCount;
+        return bricks.size();
     }
 
-    public List<Brick> getBrickList() {
-        return bricks;
+    /*
+     * Decrements the brickCount variable
+     */
+    public void removeBrickFromList(Ball ball){
+            brickCount --;
+
     }
-
-    public void removeBrickFromList(Ball ball) {
-        // if (bricks.contains(brick)) {
-        // //     bricks.remove(brick);
-            brickCount -= 1;
-        // // }
-
-        // if (brickCount <=1) {
-        //     brickCount-=1;
-        //     System.out.println("Working?");
-        //     if (brickCount==0) {
-        //         ball.displayWinMessage(canvas); 
-                
-        //     }
-        // }
-
-        // if (brickCount >= 0) {
-        //     ball.displayWinMessage(canvas);
-        // } else {
-        //     brickCount--;
-        // }
-    }
-
-
 }
 

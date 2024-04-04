@@ -1,25 +1,20 @@
+// Yeshe Jangchup
+// The Paddle class creates the rectangle paddle shape
+// Acknowledements: Tenzin
+
 package breakout;
 
-import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.Rectangle;
-import java.awt.Color;
 
-public class Paddle extends GraphicsGroup{
+/*
+ * Creates a rectangular paddle shape
+ */
+public class Paddle extends Rectangle{
     private static final double WIDTH = 90;
     private static final double HEIGHT = 10;
-    private Rectangle paddle;
 
     public Paddle(double canvasWidth, double canvasHeight){
-        double paddleX = (canvasWidth - WIDTH);
-        double paddleY = (canvasHeight - HEIGHT) -20;
-        paddle = new Rectangle(paddleX, paddleY, WIDTH,HEIGHT);
-    }
-    public Rectangle paddleShape(){
-        return paddle;
-    }
+        super((canvasWidth - WIDTH), (canvasHeight - HEIGHT) - 20, WIDTH, HEIGHT);
 
-    public void setPostiion(double x, double y){
-        paddle.setPosition(x,y);
     }
-    
 }
