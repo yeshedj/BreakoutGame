@@ -30,7 +30,8 @@ public class Ball extends Ellipse {
     private static final Color NEW_COLOR = new Color(220, 200, 250);
 
     private boolean addedToCanvas = false;
-    private int remainingLives = 3; 
+    private int remainingLives = 2; 
+
 
 
     public Ball(double centerX, double centerY, double initialSpeedX, double initialSpeedY, double canvasWidth, double canvasHeight, BrickHandler brickHandler){
@@ -40,14 +41,14 @@ public class Ball extends Ellipse {
         this.ball.setFillColor(NEW_COLOR);
 
         this.brickHandler = brickHandler;
-
-        ballVelocity(getCanvas());
         
         this.topLeftX=centerX-RADIUS;
         this.topLeftY=centerY-RADIUS;
 
         this.bottomRightX=centerX+RADIUS;
         this.bottomRightY=centerY+RADIUS;
+
+        ballVelocity(getCanvas());
     }
 
     /*
@@ -88,15 +89,16 @@ public class Ball extends Ellipse {
 
                 remainingLives--;
 
-            } else {
+            } 
+            else {
                 if(handler.getNumOfBricks()==0){
                     displayGameOverMessage(canvas);
-                }else{
+                }
+                else{
                     displayGameOverMessage(canvas);
                 }
                 this.velocityX = 0;
                 this.velocityY = 0;
-
                 removeFromCanvas(canvas);
             }
         }
@@ -106,27 +108,38 @@ public class Ball extends Ellipse {
             if (velocityY > 0) {
                 velocityY = -velocityY;
             }
-        } else {
+        } 
+        else {
             if (collisionObject != null) {
                 canvas.remove(collisionObject);
                 if (brickHandler != null) { 
-                    brickHandler.removeBrickFromList(this);
+                brickHandler.removeBrickFromList(this);
+                    if(brickHandler.getNumOfBricks()==0){
+                        displayYouWinMessage(canvas);
+                        this.removeFromCanvas(canvas);
+                    }
                 }
                 velocityY = -velocityY;
             }
         }
     }
 
+    private void displayYouWinMessage(CanvasWindow canvas){
+        GraphicsText youWinMessage = new GraphicsText("You Win", (canvas.getWidth() / 2)-50, (canvas.getHeight() / 2)+20);
+        FontStyle style = FontStyle.BOLD;
+        youWinMessage.setFont(style, 20);
+        youWinMessage.setFillColor(NEW_COLOR);
+        canvas.add(youWinMessage);
+    }
 
     private void displayGameOverMessage(CanvasWindow canvas) {
-        GraphicsText gameOverMessage = new GraphicsText("Game Over", (canvas.getWidth() / 2)-50, (canvas.getHeight() / 2)+70);
+        GraphicsText gameOverMessage = new GraphicsText("Game Over", (canvas.getWidth() / 2)-60, (canvas.getHeight() / 2)+70);
         FontStyle style = FontStyle.BOLD;
         gameOverMessage.setFont(style, 20);
         gameOverMessage.setFillColor(NEW_COLOR);
         canvas.add(gameOverMessage);
     }
   
-
     private GraphicsObject objectCollisions(CanvasWindow canvas){
         GraphicsObject topLeftObj = canvas.getElementAt(this.topLeftX, this.topLeftY);
         GraphicsObject topRightObj = canvas.getElementAt(this.bottomRightX, this.topLeftY);
@@ -150,7 +163,6 @@ public class Ball extends Ellipse {
         double initialX = (canvas.getWidth() - 2 * RADIUS) / 2;
         double initialY = (canvas.getHeight() - 2 * RADIUS) / 2;
         this.ball.setPosition(initialX, initialY);
-
     }
 
     private void ballVelocity(CanvasWindow canvas){
@@ -161,9 +173,10 @@ public class Ball extends Ellipse {
         }
         if (Math.random() < 0.5) {
             this.velocityY = 10.0;
-        } else {
+        } 
+        else {
             this.velocityY = 5.0;
-}
+        }
     }
 
     private void removeFromCanvas(CanvasWindow canvas) {

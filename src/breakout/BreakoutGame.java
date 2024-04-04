@@ -4,8 +4,11 @@
 
 package breakout;
 import java.awt.Color;
+import java.util.ArrayList;
 
 import edu.macalester.graphics.CanvasWindow;
+import edu.macalester.graphics.FontStyle;
+import edu.macalester.graphics.GraphicsText;
 import edu.macalester.graphics.Rectangle;
 
 
@@ -17,10 +20,19 @@ public class BreakoutGame {
     private CanvasWindow canvas;
     private Rectangle paddle;
     private Ball ball;
+
     private BrickHandler brickHandler;
+    ArrayList<Brick> bricks;
+
 
     private static final int CANVAS_WIDTH = 650;
     private static final int CANVAS_HEIGHT = 750;
+
+    double centerX = CANVAS_WIDTH / 2.0;  
+    double centerY = CANVAS_HEIGHT / 2.0;
+
+    double initialSpeedX = 5.0;
+    double initialSpeedY = 5.0;
 
     Color NEW_COLOR = new Color(220, 200, 250);
 
@@ -33,9 +45,9 @@ public class BreakoutGame {
 
         paddle = new Rectangle(CANVAS_WIDTH / 2 - 50, CANVAS_HEIGHT - 50, 100, 10);
         paddle.setFillColor(NEW_COLOR);
-        canvas.add(paddle);
+        canvas.add(paddle);        
 
-        ball = new Ball(CANVAS_HEIGHT, CANVAS_HEIGHT, CANVAS_HEIGHT, CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT, brickHandler);
+        ball = new Ball (centerX, centerY, initialSpeedX, initialSpeedY, CANVAS_WIDTH, CANVAS_HEIGHT, brickHandler);
         ball.addToCanvas(canvas);
         animateBall();
 
@@ -54,6 +66,8 @@ public class BreakoutGame {
     public void animateBall(){
         canvas.animate(()->{
             ball.move(canvas, paddle, brickHandler);
+            // ball.brickCollide(canvas, brickHandler);
+            // ball.paddleCollide(canvas, paddle);
         });
     }
 

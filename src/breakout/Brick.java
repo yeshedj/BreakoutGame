@@ -4,15 +4,18 @@
 
 package breakout;
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 
 import edu.macalester.graphics.CanvasWindow;
+import edu.macalester.graphics.GraphicsObject;
 import edu.macalester.graphics.Rectangle;
 
 /*
  * Creates a rectangular shape for each brick
  * Also modifies the brick color and canvas visibility
  */
-public class Brick{
+public class Brick extends GraphicsObject{
 
     private Rectangle brick;
     private CanvasWindow canvas;
@@ -43,6 +46,30 @@ public class Brick{
      */
     public void addToCanvas() {
         canvas.add(brick);
+    }
+
+    @Override
+    protected void drawInLocalCoordinates(Graphics2D gc) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'drawInLocalCoordinates'");
+    }
+
+    @Override
+    public boolean testHitInLocalCoordinates(double x, double y) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'testHitInLocalCoordinates'");
+    }
+
+    @Override
+    public Rectangle2D getBounds() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getBounds'");
+    }
+
+    @Override
+    protected Object getEqualityAttributes() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getEqualityAttributes'");
     }
 }
 

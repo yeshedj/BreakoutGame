@@ -14,17 +14,15 @@ import edu.macalester.graphics.CanvasWindow;
  */
 public class BrickHandler{    
     private CanvasWindow canvas;
-    private List <Brick> bricks;
+
     int brickCount = 0;
 
     public static final int BRICK_WIDTH = 65;
     public static final int BRICK_HEIGHT = 20;
     public static final int BRICK_SPACING = 7;
 
-
     public BrickHandler(CanvasWindow canvas) {
         this.canvas = canvas;
-        this.bricks = new ArrayList<>();
     }
 
     /*
@@ -35,8 +33,11 @@ public class BrickHandler{
         int rows = 9;
         int cols = 9;
 
+        brickCount = rows*cols;
+
         int startX = 5; 
         int startY = 55; 
+
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
@@ -54,15 +55,17 @@ public class BrickHandler{
      * Returns the number of bricks in the bricks list.
      */
     public int getNumOfBricks() {
-        return bricks.size();
+        return brickCount;
     }
 
     /*
      * Decrements the brickCount variable
      */
     public void removeBrickFromList(Ball ball){
-            brickCount --;
+        brickCount --;
 
     }
+
+  
 }
 
